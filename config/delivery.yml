@@ -1,14 +1,14 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: bg-tanzu-java-web-app
+  name: kn-app
   labels:
     app.kubernetes.io/part-of: tanzu-java-web-app
-    apps.tanzu.vmware.com/bluegreen: "true"
     apps.tanzu.vmware.com/has-tests: "true"
+    apps.tanzu.vmware.com/traffic_current: "true"
     apps.tanzu.vmware.com/workload-type: web
     app.kubernetes.io/component: run
-    carto.run/workload-name: bg-tanzu-java-web-app
+    carto.run/workload-name: kn-app
 spec:
   template:
     metadata:
@@ -26,25 +26,25 @@ spec:
           appliveview-sample/app-live-view-systemproperties
         developer.conventions/target-containers: workload
         kubectl.kubernetes.io/last-applied-configuration: |
-          {"apiVersion":"carto.run/v1alpha1","kind":"Workload","metadata":{"annotations":{},"creationTimestamp":"2022-06-30T09:32:47Z","generation":3,"labels":{"app.kubernetes.io/part-of":"tanzu-java-web-app","apps.tanzu.vmware.com/bluegreen":"true","apps.tanzu.vmware.com/has-tests":"true","apps.tanzu.vmware.com/workload-type":"web"},"name":"bg-tanzu-java-web-app","namespace":"dev","resourceVersion":"8763563","uid":"4b2e822c-cfd5-46f6-b1b6-f0e329e21a0f"},"spec":{"params":[{"name":"gitops_repository","value":"ssh://git@github.com/chiarasalvatore/tap.git"}],"source":{"git":{"ref":{"branch":"bluegreen"},"url":"ssh://git@github.com/chiarasalvatore/tanzu-java-web-app.git"}}}}
+          {"apiVersion":"carto.run/v1alpha1","kind":"Workload","metadata":{"annotations":{},"labels":{"app.kubernetes.io/part-of":"tanzu-java-web-app","apps.tanzu.vmware.com/has-tests":"true","apps.tanzu.vmware.com/traffic_current":"true","apps.tanzu.vmware.com/workload-type":"web"},"name":"kn-app","namespace":"dev"},"spec":{"params":[{"name":"gitops_repository","value":"ssh://git@github.com/chiarasalvatore/tap.git"},{"name":"traffic_current","value":50}],"source":{"git":{"ref":{"branch":"main"},"url":"ssh://git@github.com/chiarasalvatore/tanzu-java-web-app.git"}}}}
       labels:
         app.kubernetes.io/component: run
         app.kubernetes.io/part-of: tanzu-java-web-app
-        apps.tanzu.vmware.com/bluegreen: "true"
         apps.tanzu.vmware.com/has-tests: "true"
+        apps.tanzu.vmware.com/traffic_current: "true"
         apps.tanzu.vmware.com/workload-type: web
-        carto.run/workload-name: bg-tanzu-java-web-app
+        carto.run/workload-name: kn-app
         conventions.apps.tanzu.vmware.com/framework: spring-boot
         tanzu.app.live.view: "true"
         tanzu.app.live.view.application.actuator.port: "8081"
         tanzu.app.live.view.application.flavours: spring-boot
-        tanzu.app.live.view.application.name: bg-tanzu-java-web-app
+        tanzu.app.live.view.application.name: kn-app
     spec:
       containers:
       - env:
         - name: JAVA_TOOL_OPTIONS
           value: -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include=* -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: europe-west8-docker.pkg.dev/csplayground-354114/tap-registry/tanzu/bg-tanzu-java-web-app-dev@sha256:4ab0c15709dbd9711a816f2070c5120804e139000db966a4907ede20b773fcc4
+        image: europe-west8-docker.pkg.dev/csplayground-354114/tap-registry/tanzu/kn-app-dev@sha256:5ec63f3e6e536d32b878f9e5b6911ea11a6d29464c9c83b9a734ac89618f745b
         livenessProbe:
           httpGet:
             path: /livez
@@ -63,4 +63,7 @@ spec:
         securityContext:
           runAsUser: 1000
       serviceAccountName: default
+  traffic:
+  - latestRevision: true
+    percent: 50
 
