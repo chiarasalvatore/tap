@@ -12,7 +12,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: bg-tanzu-java-web-app-0fcdf0b7-d886-41be-acc3-fd68c2508042
+      name: bg-tanzu-java-web-app-0df37bbe-3a49-4a95-a871-99c001e65fec
       labels:
         app.kubernetes.io/component: run
         app.kubernetes.io/part-of: tanzu-java-web-app
@@ -67,6 +67,9 @@ spec:
       serviceAccountName: default
   traffic:
   - latestRevision: true
-    percent: 100
+    percent: 50
     tag: blue
+  - revisionName: bg-tanzu-java-web-app-0fcdf0b7-d886-41be-acc3-fd68c2508042
+    percent: 50
+    tag: green
 
