@@ -1,2 +1,0 @@
-# tap
-Tanzu Application Platform
