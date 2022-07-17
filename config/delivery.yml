@@ -12,7 +12,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: blue-green-knative-35cfa3a4-011d-44fe-8adc-084caddf264e
+      name: bg-tanzu-java-web-app-0df37bbe-3a49-4a95-a871-99c001e65fec
       labels:
         app.kubernetes.io/component: run
         app.kubernetes.io/part-of: tanzu-java-web-app
@@ -46,7 +46,7 @@ spec:
       - env:
         - name: JAVA_TOOL_OPTIONS
           value: -Dmanagement.endpoint.health.probes.add-additional-paths="true" -Dmanagement.endpoint.health.show-details=always -Dmanagement.endpoints.web.base-path="/actuator" -Dmanagement.endpoints.web.exposure.include=* -Dmanagement.health.probes.enabled="true" -Dmanagement.server.port="8081" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
-        image: europe-west8-docker.pkg.dev/csplayground-354114/tap-registry/tanzu/bg-tanzu-java-web-app-dev@sha256:b38c4662820c63af8071dddeb295a758f4ab1630661dbae07412001ef2943f36
+        image: europe-west8-docker.pkg.dev/csplayground-354114/tap-registry/tanzu/bg-tanzu-java-web-app-dev@sha256:b5d01f26246a8a93b6fdc4f908a962aa452532645f5709afd6473292fc5ea8d8
         livenessProbe:
           httpGet:
             path: /livez
@@ -67,6 +67,9 @@ spec:
       serviceAccountName: default
   traffic:
   - latestRevision: true
-    percent: 100
+    percent: 50
     tag: blue
+  - revisionName: bg-tanzu-java-web-app-0fcdf0b7-d886-41be-acc3-fd68c2508042
+    percent: 50
+    tag: green
 
